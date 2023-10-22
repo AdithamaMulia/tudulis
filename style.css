@@ -1,0 +1,282 @@
+:root {
+	--dark: #374151;
+	--darker: #1F2937;
+	--darkest: #111827;
+	--grey: #6B7280;
+	--pink: #EC4899;
+	--purple: #8B5CF6;
+	--light: #EEE;
+}
+
+* {
+	margin: 0;
+	box-sizing: border-box;
+	font-family: "Fira sans", sans-serif;
+}
+
+body {
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+	color: #FFF;
+	background-color: var(--dark);
+}
+
+header {
+	padding: 2rem 1rem;
+	max-width: 800px;
+	width: 100%;
+	margin: 0 auto;
+}
+
+header h1{ 
+	font-size: 2.5rem;
+	font-weight: 300;
+	color: var(--grey);
+	margin-bottom: 1rem;
+}
+
+#new-task-form {
+	display: flex;;
+}
+
+input, button {
+	appearance: none;
+	border: none;
+	outline: none;
+	background: none;
+}
+
+#new-task-input {
+	flex: 1 1 0%;
+	background-color: var(--darker);
+	padding: 1rem;
+	border-radius: 1rem;
+	margin-right: 1rem;
+	color: var(--light);
+	font-size: 1.25rem;
+}
+
+#new-task-input::placeholder {
+	color: var(--grey);
+}
+
+#new-task-submit {
+	color: var(--pink);
+	font-size: 1.25rem;
+	font-weight: 700;
+	background-image: linear-gradient(to right, var(--pink), var(--purple));
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	cursor: pointer;
+	transition: 0.4s;
+}
+
+#new-task-submit:hover {
+	opacity: 0.8;
+}
+
+#new-task-submit:active {
+	opacity: 0.6;
+}
+
+main {
+	flex: 1 1 0%;
+	max-width: 800px;
+	width: 100%;
+	margin: 0 auto;
+}
+
+.task-list {
+	padding: 1rem;
+}
+
+.task-list h2 {
+	font-size: 1.5rem;
+	font-weight: 300;
+	color: var(--grey);
+	margin-bottom: 1rem;
+}
+
+#tasks .task {
+	display: flex;
+	justify-content: space-between;
+	background-color: var(--darkest);
+	padding: 1rem;
+	border-radius: 1rem;
+	margin-bottom: 1rem;
+}
+
+.task .content {
+	flex: 1 1 0%;
+}
+
+.task .content .text {
+	color: var(--light);
+	font-size: 1.125rem;
+	width: 100%;
+	display: block;
+	transition: 0.4s;
+}
+
+.task .content .text:not(:read-only) {
+	color: var(--pink);
+}
+
+.task .actions {
+	display: flex;
+	margin: 0 -0.5rem;
+}
+
+.task .actions button {
+	cursor: pointer;
+	margin: 0 0.5rem;
+	font-size: 1.125rem;
+	font-weight: 700;
+	transition: 0.4s;
+}
+
+.task .actions button:hover {
+	opacity: 0.8;
+}
+
+.task .actions button:active {
+	opacity: 0.6;
+}
+
+.task .actions .edit {
+	background-image: linear-gradient(to right, var(--pink), var(--purple));
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
+
+.task .actions .delete {
+	color: crimson;
+}
+.task .actions select {
+    background: linear-gradient(to right, var(--pink), var(--purple));
+    color: var(--light);
+    border: none;
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    font-size: 1.125rem;
+    font-weight: 700;
+    transition: 0.4s;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+.task .actions select:hover {
+    opacity: 0.8;
+}
+
+.task .actions select:active {
+    opacity: 0.6;
+}
+.task .actions select option {
+    background: white;
+    color: var(--dark);
+}
+.custom-checkbox {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #000;
+    display: inline-block;
+    margin-right: 10px;
+    cursor: pointer;
+    background-color: white;
+}
+
+.checkbox:checked + .custom-checkbox {
+    background-color: yellow;
+}
+
+#new-task-form {
+    display: flex;
+    align-items: center; /* Vertically center child elements */
+}
+
+#new-task-submit {
+    flex-shrink: 0; /* Prevent button from shrinking */
+    color: var(--pink);
+    font-size: 1.25rem;
+    font-weight: 700;
+    background-image: linear-gradient(to right, var(--pink), var(--purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    cursor: pointer;
+    transition: 0.4s;
+}
+
+/* Your existing CSS code */
+
+/* Your existing CSS code */
+
+/* Add a media query to make the buttons stay in a single line on smaller screens */
+@media (max-width: 600px) {
+	.task .actions {
+	  flex-wrap: wrap; /* Allow the buttons to wrap to the next line if they don't fit */
+	  justify-content: flex-start; /* Align the buttons to the start of the line */
+	}
+  
+	.task .actions button {
+	  margin: 0 0.5rem; /* Adjust horizontal spacing between buttons */
+	}
+  }
+
+/* Add this to your existing CSS code */
+/* Add this to your existing CSS code */
+.header-content {
+    display: flex;
+    justify-content: space-between; /* Align elements in one row */
+    align-items: center;
+    padding: 10px 20px; /* Add padding for spacing */
+}
+
+.header-buttons {
+    display: flex;
+}
+
+.header-buttons button {
+    margin-left: 10px;
+    padding: 8px 15px;
+    background-color: #1a202c;
+    color: #ffffff;
+    border: none;
+    cursor: pointer;
+}
+
+.header-buttons button:hover {
+    background-color: #2d3748;
+}
+@media (max-width: 768px) {
+    .header-content {
+        flex-direction: column; /* Change layout to column on smaller screens */
+        align-items: flex-start;
+    }
+
+    .header-buttons {
+        margin-top: 10px; /* Add spacing between the buttons */
+    }
+}
+
+header h1 {
+    font-size: 2.5rem;
+    font-weight: 300;
+    background-image: linear-gradient(to right, var(--pink), var(--purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 1rem;
+}
+
+main h2 {
+    font-size: 2.5rem;
+    font-weight: 300;
+    background-image: linear-gradient(to right, var(--pink), var(--purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 1rem;
+}
+  
+  
