@@ -1,0 +1,17 @@
+create database tudulis;
+
+create table userdata (
+    id_user INT NOT NULL AUTO_INCREMENT,
+    username VARCHAR(100) NOT NULL,
+    password VARCHAR(100) NOT NULL,
+    PRIMARY KEY(id_user)
+);
+
+create table listudu (
+    id_task INT NOT NULL AUTO_INCREMENT,
+    id_user INT NOT NULL,
+    task_name VARCHAR(255) NOT NULL,
+    task_status VARCHAR(255),
+    PRIMARY KEY(id_task),
+    FOREIGN KEY(id_user) REFERENCES userdata(id_user)
+);

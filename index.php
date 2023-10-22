@@ -1,3 +1,32 @@
+<?php 
+session_start();
+include 'koneksi.php';
+
+if(isset($_SESSION['user_id'])){
+    $user_id = $_SESSION['user_id'];
+    $userData = array();
+    $user_query = "SELECT username FROM userdata WHERE id_user = $user_id";
+    $user_result = $conn->query($user_query);
+
+    if ($user_result->num_rows == 1) {
+        $userData = $user_result->fetch_assoc();
+    }
+
+    $tasks = array();
+    $sql = "SELECT id_task, task_name, task_status FROM listudu WHERE id_user = $user_id ORDER BY task_status DESC";
+    $result = $conn->query($sql);
+
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $tasks[] = $row;
+        }
+    }
+} else {
+    header("Location: login.php");
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,13 +39,13 @@
     <style>
         .task {
             display: flex;
-            flex-direction: row; /* Default: row */
+            flex-direction: row;
             align-items: flex-start;
         }
 
         @media (max-width: 768px) {
             .task {
-                flex-direction: column; /* Change to column on smaller screens */
+                flex-direction: column;
                 align-items: flex-start;
                 margin-bottom: 20px;
             }
@@ -28,31 +57,137 @@
 <header>
     <div class="header-content">
         <h1 style="color: black;">Task List 2023</h1>
-        <div class="header-buttons">
-            <button id="login-button">Login</button>
-            <button id="signup-button">Sign Up</button>
-        </div>
+		<?php
+			if(!isset($_SESSION['user_id'])){
+				echo '<div class="header-buttons">';
+				echo '<button id="login-button">Login</button>';
+				echo '<button id="signup-button">Sign Up</button>';
+				echo '</div>';
+			} else {
+				echo '<div class="header-buttons">';
+				echo '<a>Wassup ' . $userData['username'] . '</a>';
+				echo '</div>';
+			}
+		?>
     </div>
-    <form id="new-task-form">
-        <input 
-            type="text" 
-            name="new-task-input" 
-            id="new-task-input" 
-            placeholder="What do you have planned?" />
-        <input 
-            type="submit"
-            id="new-task-submit" 
-            value="Add task" />
-    </form>
+    <form id="new-task-form" action="tasklist.php" method="post">
+		<input 
+			type="text" 
+			name="new-task-input" 
+			id="new-task-input" 
+			placeholder="What do you have planned?" 
+			required/>
+			<input type="hidden" name="user_id" value="<?php echo $user_id; ?>">
+		<input 
+			type="submit"
+			id="new-task-submit" 
+			value="Add task" />
+	</form>
 </header>
 <main>
-    <section class="task-list">
-        <h2>Tasks :</h2>
-        <div id="tasks">
-        </div>
-    </section>
+<div id="tasks">
+	<?php foreach ($tasks as $task) { ?>
+		<div class="task">
+			<div class="content">
+				<input type="text" class="text" value="<?php echo $task['task_name']; ?>" data-task-id="<?php echo $task['id_task']; ?>" readonly>
+			</div>
+			<div class="actions">
+				<input type="checkbox" class="custom-checkbox checkbox" data-task-id="<?php echo $task['id_task']; ?>" value="<?php echo ($task['task_status']) ?>">
+				<button class="edit">Edit</button>
+				<button class="delete" data-task-id="<?php echo $task['id_task']; ?>">Delete</button>
+				<select class="status" id="status-select-<?php echo $task['id_task']; ?>" name="task_status[]">
+					<option value="Not Yet" <?php echo ($task['task_status'] === 'Not Yet') ? 'selected' : ''; ?>>Not Yet</option>
+					<option value="On Progress" <?php echo ($task['task_status'] === 'On Progress') ? 'selected' : ''; ?>>On Progress</option>
+					<option value="Waiting On" <?php echo ($task['task_status'] === 'Waiting On') ? 'selected' : ''; ?>>Waiting On</option>
+				</select>
+			</div>
+		</div>
+	<?php } ?>
+</div>
 </main>
-	<script>
+<script>
+document.addEventListener('change', function (event) {
+    const target = event.target;
+
+    if (target.classList.contains('checkbox')) {
+        const taskId = target.getAttribute('data-task-id');
+
+        if (confirm('Are you sure the task is done?')) {
+            updateTaskDone(taskId);
+        }
+    }
+});
+
+function updateTaskDone(taskId) {
+    fetch('taskDone.php', {
+        method: 'POST',
+        body: new URLSearchParams({ taskId: taskId }),
+    })
+    .then(response => {
+        if (response.ok) {
+            window.location.reload();
+        } else {
+            // Handle errors if needed
+        }
+    })
+    .catch(error => {
+        console.error('Error deleting task:', error);
+    });
+}
+
+document.addEventListener('click', function (event) {
+    const target = event.target;
+
+    if (target.classList.contains('delete')) {
+        const taskId = target.getAttribute('data-task-id');
+
+        if (confirm('Are you sure you want to delete this task?')) {
+            deleteTaskFromDatabase(taskId);
+        }
+    }
+});
+
+function deleteTaskFromDatabase(taskId) {
+    fetch('deleteTask.php', {
+        method: 'POST',
+        body: new URLSearchParams({ taskId: taskId }),
+    })
+    .then(response => {
+        if (response.ok) {
+            window.location.reload();
+        } else {
+            // Handle errors if needed
+        }
+    })
+    .catch(error => {
+        console.error('Error deleting task:', error);
+    });
+}
+
+document.addEventListener('change', function (event) {
+    const target = event.target;
+
+    if (target.classList.contains('status')) {
+        const taskId = target.id.replace('status-select-', '');
+        const newStatus = target.value;
+        updateTaskStatusInDatabase(taskId, newStatus);
+    }
+});
+
+function updateTaskStatusInDatabase(taskId, newStatus) {
+    const formData = new FormData();
+    formData.append('task_id', taskId);
+    formData.append('new_status', newStatus);
+
+    fetch('updateStatus.php', {
+        method: 'POST',
+        body: formData,
+    })
+    .catch(error => {
+        console.error('Error updating task status:', error);
+    });
+}
+
 const editButtons = document.querySelectorAll('.edit');
 
 editButtons.forEach(editButton => {
@@ -67,84 +202,38 @@ editButtons.forEach(editButton => {
         } else {
             textInput.setAttribute('readonly', 'true');
             this.textContent = 'Edit';
+            const newName = textInput.value;
+            const taskId = textInput.getAttribute('data-task-id');
+            updateTaskNameInDatabase(taskId, newName);
         }
     });
 });
 
-const deleteButtons = document.querySelectorAll('.delete');
-
-deleteButtons.forEach(deleteButton => {
-    deleteButton.addEventListener('click', function () {
-        const task = this.closest('.task');
-        task.remove();
-    });
-});
-
-const newTaskForm = document.getElementById('new-task-form');
-
-newTaskForm.addEventListener('submit', function (e) {
-    e.preventDefault();
-    const taskInput = document.getElementById('new-task-input');
-    const taskText = taskInput.value;
-
-    if (taskText.trim() !== '') {
-        const newTask = document.createElement('div');
-        newTask.classList.add('task');
-        newTask.innerHTML = `
-            <div class="content">
-                <input type="text" class="text" value="${taskText}" readonly>
-            </div>
-            <div class="actions">
-                <span class="custom-checkbox"></span>
-                <input type="checkbox" class="checkbox">
-                <span class="checkmark"></span>
-                <button class="edit">Edit</button>
-                <button class="delete">Delete</button>
-                <select class="status" id="status-select">
-                    <option value="high">Not Yet</option>
-                    <option value="medium">On Progress</option>
-                    <option value="low">Done</option>
-                </select>
-            </div>
-        `;
-        const taskList = document.getElementById('tasks');
-        taskList.appendChild(newTask);
-        taskInput.value = '';
-    }
-});
-
-const taskList = document.getElementById('tasks');
-function handleTaskActions(event) {
+document.addEventListener('change', function (event) {
     const target = event.target;
 
-    if (target.classList.contains('edit')) {
-        const task = target.closest('.task');
-        const textInput = task.querySelector('.text');
-        if (textInput.hasAttribute('readonly')) {
-            textInput.removeAttribute('readonly');
-            textInput.focus();
-            target.textContent = 'Save';
-        } else {
-            textInput.setAttribute('readonly', 'true');
-            target.textContent = 'Edit';
-        }
-    } else if (target.classList.contains('delete')) {
-        const task = target.closest('.task');
-        task.remove();
-    }
-}
-
-taskList.addEventListener('click', handleTaskActions);
-
-const statusSelect = document.getElementById('status-select');
-
-statusSelect.addEventListener('change', function () {
-    if (statusSelect.value === 'high') {
-        statusSelect.style.color = 'red';
-    } else {
-        statusSelect.style.color = '';
+    if (target.classList.contains('text')) {
+        const taskId = target.getAttribute('data-task-id');
+        const newName = target.value;
+		console.log(taskId);
+		console.log(newName);
+        updateTaskNameInDatabase(taskId, newName);
     }
 });
+
+function updateTaskNameInDatabase(taskId, newName) {
+    const formData2 = new FormData();
+    formData2.append('task_id', taskId);
+    formData2.append('new_name', newName);
+
+    fetch('updateName.php', {
+        method: 'POST',
+        body: formData2,
+    })
+    .catch(error => {
+        console.error('Error updating task name:', error);
+    });
+}
 </script>
 </body>
 </html>
