@@ -56,7 +56,7 @@ if(isset($_SESSION['user_id'])){
 
 <header>
     <div class="header-content">
-        <h1 style="color: black;">Task List 2023</h1>
+        <h1>Task List 2023</h1>
 		<?php
 			if(!isset($_SESSION['user_id'])){
 				echo '<div class="header-buttons">';
@@ -65,7 +65,13 @@ if(isset($_SESSION['user_id'])){
 				echo '</div>';
 			} else {
 				echo '<div class="header-buttons">';
-				echo '<a>Wassup ' . $userData['username'] . '</a>';
+				echo '<a style="font-size: 1.2rem;
+                font-weight: 300;
+                background-image: linear-gradient(to right, var(--pink), var(--purple));
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                margin-bottom: 1rem;">Wassup ' . $userData['username'] . '</a>';
+                echo '<a href="login.php"><button style="background-color: #1a202c;">Logout</button></a>';
 				echo '</div>';
 			}
 		?>
@@ -88,18 +94,25 @@ if(isset($_SESSION['user_id'])){
 <div id="tasks">
 	<?php foreach ($tasks as $task) { ?>
 		<div class="task">
-			<div class="content">
+			<div class="content mt-3">
 				<input type="text" class="text" value="<?php echo $task['task_name']; ?>" data-task-id="<?php echo $task['id_task']; ?>" readonly>
 			</div>
 			<div class="actions">
-				<input type="checkbox" class="custom-checkbox checkbox" data-task-id="<?php echo $task['id_task']; ?>" value="<?php echo ($task['task_status']) ?>">
-				<button class="edit">Edit</button>
+            <label class="switch mt-2">
+            <input type="checkbox" class="toggleSwitch" data-task-id="<?php echo $task['id_task']; ?>" value="<?php echo ($task['task_status']) ?>">
+            <span class="slider"></span>
+            </label>
+            <p style="background-image: linear-gradient(to right, var(--pink), var(--purple));
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;" class="mt-3 ml-3" >Done</p>
+            <button class="edit">Edit</button>
 				<button class="delete" data-task-id="<?php echo $task['id_task']; ?>">Delete</button>
 				<select class="status" id="status-select-<?php echo $task['id_task']; ?>" name="task_status[]">
 					<option value="Not Yet" <?php echo ($task['task_status'] === 'Not Yet') ? 'selected' : ''; ?>>Not Yet</option>
 					<option value="On Progress" <?php echo ($task['task_status'] === 'On Progress') ? 'selected' : ''; ?>>On Progress</option>
 					<option value="Waiting On" <?php echo ($task['task_status'] === 'Waiting On') ? 'selected' : ''; ?>>Waiting On</option>
-				</select>
+                    <option value="Done" <?php echo ($task['task_status'] === 'Done') ? 'selected' : ''; ?>>Done</option>
+                </select>
 			</div>
 		</div>
 	<?php } ?>
@@ -109,7 +122,7 @@ if(isset($_SESSION['user_id'])){
 document.addEventListener('change', function (event) {
     const target = event.target;
 
-    if (target.classList.contains('checkbox')) {
+    if (target.classList.contains('toggleSwitch')) {
         const taskId = target.getAttribute('data-task-id');
 
         if (confirm('Are you sure the task is done?')) {
@@ -234,6 +247,18 @@ function updateTaskNameInDatabase(taskId, newName) {
         console.error('Error updating task name:', error);
     });
 }
+document.getElementById("toggleSwitch").addEventListener("change", function() {
+    // Handle the change event here
+    if (this.checked) {
+        // Toggle is on
+        // Perform actions for the "on" state
+        console.log("Switch is ON");
+    } else {
+        // Toggle is off
+        // Perform actions for the "off" state
+        console.log("Switch is OFF");
+    }
+});
 </script>
 </body>
 </html>

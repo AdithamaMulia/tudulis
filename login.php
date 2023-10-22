@@ -55,7 +55,7 @@
         }
 
         .card {
-            background-color: #fff;
+            background-color: #1a202c;
             border-radius: 10px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             padding: 20px;
@@ -65,24 +65,39 @@
         h2 {
             margin: 0;
         }
+        .rounded-buttons {
+            background-color: #374151;
+            color: black;
+            border: none;
+            border-radius: 20px;
+            padding: 10px 20px;
+            cursor: pointer;
+            width: 100%;
+            max-width: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto;
+            font-family: 'Tenor Sans', sans-serif;
+        }
     </style>
 </head>
-<body style="background-color: #F2E6D3;">
+<body style="background-color: #374151;">
     <div class="card custom-card">
-        <h2>Login</h2>
+        <h2 style="color:white;">Login</h2>
         <br />
         <form id="login-form" action="login.php" method="post">
-            <label for="username">Username:</label>
+            <label for="username" style="color:white;">Username:</label>
             <input type="text" name="username" required><br><br>
 
-            <label for="password">Password:</label>
+            <label for="password" style="color:white;">Password:</label>
             <input type="password" name= "password" required><br><br>
             <br />
 
-            <input type="submit" value="Log In" class="login rounded-buttons">
+            <input type="submit" style="color:white;" value="Log In" class="login rounded-buttons">
         </form>
         <br />
-        <a href="signup.php">Don't have an account? Click to Sign Up Now!</a>
+        <a href="signup.php" style="color:blue;">Don't have an account? Click to Sign Up Now!</a>
     </div>
 </body>
 </html>

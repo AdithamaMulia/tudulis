@@ -8,10 +8,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         .custom-card {
-            background-color:  #FFCC80 !important;
+            background-color:  #1a202c !important;
         }
         .rounded-buttons {
-            background-color: #F6B14A;
+            background-color: #374151;
             color: black;
             border: none;
             border-radius: 20px;
@@ -23,30 +23,29 @@
             justify-content: center;
             align-items: center;
             margin: 0 auto;
-            box-shadow: 5px 5px 10px grey;
             font-family: 'Tenor Sans', sans-serif;
         }
     </style>
 </head>
-<body style="background-color: #F2E6D3;">
+<body style="background-color: #374151;">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="card custom-card" style="margin-top:50px;">
                     <div class="card-body">
-                        <h2 class="card-title text-center">Sign Up</h2>
+                        <h2 class="card-title text-center" style="color:white;">Sign Up</h2>
                         <form action="prosesSignup.php" method="post" enctype="multipart/form-data">
                             <div class="mb-3">
-                                <label for="username" class="form-label">Username:</label>
+                                <label for="username" class="form-label" style="color:white;">Username:</label>
                                 <input type="text" class="form-control" name="username" required>
                             </div>
 
                             <div class="mb-3">
-                                <label for="password" class="form-label">Password:</label>
+                                <label for="password" class="form-label" style="color:white;">Password:</label>
                                 <input type="password" class="form-control" name="password" required>
                             </div>
 
-                            <input type="submit" class="btn btn-primary rounded-buttons" value="Sign Up">
+                            <input type="submit" class="btn btn-primary rounded-buttons" value="Sign Up" style="color:white;">
                             <br />
                             <div class="mb-3 text-center">
                                 <a href="login.php">Already have an account? Click to Log in Now!</a>
