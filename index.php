@@ -36,21 +36,6 @@ if(isset($_SESSION['user_id'])){
     <title>Task List 2021</title>
     <link rel="stylesheet" type="text/css" href="style.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <style>
-        .task {
-            display: flex;
-            flex-direction: row;
-            align-items: flex-start;
-        }
-
-        @media (max-width: 768px) {
-            .task {
-                flex-direction: column;
-                align-items: flex-start;
-                margin-bottom: 20px;
-            }
-        }
-    </style>
 </head>
 <body style="background-color: #374151;">
 
@@ -80,13 +65,15 @@ if(isset($_SESSION['user_id'])){
 		<input 
 			type="text" 
 			name="new-task-input" 
-			id="new-task-input" 
+			id="new-task-input"
+            style="width:100%; max-width:650px;" 
 			placeholder="What do you have planned?" 
 			required/>
 			<input type="hidden" name="user_id" value="<?php echo $user_id; ?>">
 		<input 
 			type="submit"
-			id="new-task-submit" 
+			id="new-task-submit"
+            style="width:100%; max-width:100px;"
 			value="Add task" />
 	</form>
 </header>
@@ -95,16 +82,13 @@ if(isset($_SESSION['user_id'])){
 	<?php foreach ($tasks as $task) { ?>
 		<div class="task">
 			<div class="content mt-3">
-				<input type="text" class="text" value="<?php echo $task['task_name']; ?>" data-task-id="<?php echo $task['id_task']; ?>" readonly>
+				<input type="text" class="text" style="width:100%; min-width: 150px;" value="<?php echo $task['task_name']; ?>" data-task-id="<?php echo $task['id_task']; ?>" readonly>
 			</div>
 			<div class="actions">
             <label class="switch mt-2">
             <input type="checkbox" class="toggleSwitch" data-task-id="<?php echo $task['id_task']; ?>" value="<?php echo ($task['task_status']) ?>">
             <span class="slider"></span>
             </label>
-            <p style="background-image: linear-gradient(to right, var(--pink), var(--purple));
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;" class="mt-3 ml-3" >Done</p>
             <button class="edit">Edit</button>
 				<button class="delete" data-task-id="<?php echo $task['id_task']; ?>">Delete</button>
 				<select class="status" id="status-select-<?php echo $task['id_task']; ?>" name="task_status[]">
@@ -140,7 +124,6 @@ function updateTaskDone(taskId) {
         if (response.ok) {
             window.location.reload();
         } else {
-            // Handle errors if needed
         }
     })
     .catch(error => {
@@ -169,7 +152,6 @@ function deleteTaskFromDatabase(taskId) {
         if (response.ok) {
             window.location.reload();
         } else {
-            // Handle errors if needed
         }
     })
     .catch(error => {

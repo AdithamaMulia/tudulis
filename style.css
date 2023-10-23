@@ -109,6 +109,10 @@ main {
 
 .task .content {
 	flex: 1 1 0%;
+    width: 70%;
+    white-space: normal; /* Prevent text from wrapping to the next line */
+    overflow: auto; /* Hide overflowing text */
+    text-overflow: ellipsis;
 }
 
 .task .content .text {
@@ -117,6 +121,11 @@ main {
 	width: 100%;
 	display: block;
 	transition: 0.4s;
+    white-space: normal;
+    text-overflow: ellipsis;
+    max-width: 100px;
+    overflow: auto; 
+    overflow-x: auto;
 }
 
 .task .content .text:not(:read-only) {
